@@ -1,6 +1,7 @@
 # An implementation of an Multi N-Gas
 
 import math
+import os
 import random
 
 import numpy as np
@@ -76,7 +77,7 @@ def eta(t):
 # h(dist) = exp (-1/2 * dist^2 / s^2)
 # The task wants a fixed s instead of s(t). So t is not used.
 def h(dist, s):
-    return np.exp(-0.5 * (dist**2) / (s**2))
+    return np.exp(-0.5 * (dist ** 2) / (s ** 2))
 
 
 def generate_three_circles(amount):
@@ -130,6 +131,7 @@ def plot_exponential_decaying_function(a, b):
     plt.xlabel('$x$')
     plt.ylabel('$f(x)=ab^x$')
 
+    plt.savefig(f"out/plot_exponential_decaying_function.png")
     plt.show()
 
 
@@ -143,9 +145,10 @@ def plot_gaussian_neighborhood_function(s):
     plt.xlabel('$x$')
     plt.ylabel('$h(dist,s)=e^{-1/2 * dist^2 / s^2}$')
     # Since we have the distances 0.0 ... K-1, these values are interesting
-    plt.xlim([0.0, K-1])
+    plt.xlim([0.0, K - 1])
     plt.ylim([0.0, 1])
 
+    plt.savefig(f"out/plot_gaussian_neighborhood_function.png")
     plt.show()
 
 
@@ -157,6 +160,7 @@ def plot_2dim_data(x_train):
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.0])
 
+    plt.savefig(f"out/x_train.png")
     plt.show()
 
 
@@ -173,6 +177,7 @@ def plot_2dim_neurons(neurons_M_K, stimulus_count):
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.0])
 
+    plt.savefig(f"out/plot_2dim_neurons-strimulus_count_{stimulus_count}.png")
     plt.show()
 
 
@@ -203,8 +208,17 @@ if __name__ == '__main__':
     for i in range(M):
         colors.append('#%06X' % randint(0, 0xFFFFFF))
 
+    # Create output dir for the output neurons and plots
+    path = 'out'
+    try:
+        os.mkdir(path)
+    except OSError:
+        print("Creation of the directory %s failed" % path)
+    else:
+        print("Successfully created the directory %s" % path)
+
     # Either Load the data
-    #x_train = np.loadtxt('PA-E-train2.txt', comments="#")
+    # x_train = np.loadtxt('PA-E-train2.txt', comments="#")
     # OR generate data
     # Here, i used three circles with centres (0.2, 0.2), (0.4, 0.8), (0.8, 0.2)
     # with radius 0.1 each.
@@ -230,4 +244,4 @@ if __name__ == '__main__':
     plot_2dim_neurons(neurons_M_K, P)
 
     # Output neurons
-    np.savetxt('PA-E-test.txt', neurons_M_K.reshape((M * K, 2)), fmt='%1.6f')
+    np.savetxt('out/PA-E-test.txt', neurons_M_K.reshape((M * K, 2)), fmt='%1.6f')
