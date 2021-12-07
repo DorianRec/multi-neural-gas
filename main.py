@@ -162,9 +162,7 @@ def plot_2dim_data(x_train):
 
 # This function works only for FOUR partner N-Gas, since the colors have to be hard coded.
 def plot_2dim_neurons(neurons_M_K, stimulus_count):
-    colors = []
     for i in range(M):
-        colors.append('#%06X' % randint(0, 0xFFFFFF))
         plt.scatter(*zip(*neurons_M_K[i].reshape(K, 2)), color=colors[i])
         plt.legend(range(M))
 
@@ -200,6 +198,11 @@ if __name__ == '__main__':
     if g < 1 or 5 < g:
         raise Exception('Restriction: 1 <= g <= 5')
 
+    # After M is set, set the colors for each neural-Gas, for plotting it
+    colors = []
+    for i in range(M):
+        colors.append('#%06X' % randint(0, 0xFFFFFF))
+
     # Either Load the data
     #x_train = np.loadtxt('PA-E-train2.txt', comments="#")
     # OR generate data
@@ -226,5 +229,5 @@ if __name__ == '__main__':
         train(x_train[p], p, neurons_M_K)
     plot_2dim_neurons(neurons_M_K, P)
 
-    # Output TODO
+    # Output neurons
     np.savetxt('PA-E-test.txt', neurons_M_K.reshape((M * K, 2)), fmt='%1.6f')
